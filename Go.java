@@ -1,6 +1,6 @@
 
 import java.util.Scanner;
-
+//this is a test
 
 public class Go {
 
@@ -26,42 +26,42 @@ public class Go {
         int neighborCount = 0;
         //if piece is breathing
         if(row - 1 >= 0){
-            neighborCount += 1
+            neighborCount += 1;
             if(!otherBoard[row - 1][col].equals(otherBoard[row][col]) && !otherBoard[row - 1][col].equals("-|")){
-                enemyNeighbors += 1
+                enemyNeighbors += 1;
             }
         }
 
         if(row + 1 <= 8){
-            neighborCount += 1
+            neighborCount += 1;
             if(!otherBoard[row + 1][col].equals(otherBoard[row][col]) && !otherBoard[row + 1][col].equals("-|")){
-                    enemyNeighbors += 1
+                    enemyNeighbors += 1;
             }
 
         }
 
         if(col - 1 >= 0){
-            neighborCount += 1
+            neighborCount += 1;
             if(!otherBoard[row][col - 1 ].equals(otherBoard[row][col]) && !otherBoard[row][col -1].equals("-|")){
-                enemyNeighbors += 1
+                enemyNeighbors += 1;
             }
         }
 
         if(col + 1 <= 8){
-            neighborCount += 1
+            neighborCount += 1;
             if(!otherBoard[row][col + 1].equals(otherBoard[row][col]) && !otherBoard[row][col + 1].equals("-|")){
-                enemyNeighbors += 1
+                enemyNeighbors += 1;
             }
         
         }
 
         if(enemyNeighbors != neighborCount){ //piece can breathe and is alive
-            return true
+            return true;
         }
         else{
-            
-
+            return false;
         }
+    }
 
     
     public static void main(String[] args) {
@@ -125,7 +125,7 @@ public class Go {
         }
         scn.close();
 
-    }
+    
 
 }
 }
