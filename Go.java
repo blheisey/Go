@@ -1,13 +1,13 @@
 
 import java.util.Scanner;
-//this is a test
+
 
 public class Go {
 
     static String[][] goBoard = new String[9][9];
     static String[][] otherBoard = {
         {null, null, "X", "X", null, null, null, null, null},
-        {null, "X", "O", "O", "X", null, null, null, null},
+        {null, "●", "O", "O", "X", null, null, null, null},
         {null, "X", "O", null, "O", "X", null, null, null},
         {null, "X", "O", "O", "O", "X", null, null, null},
         {null, null, "X", "O", "O", "X", null, null, null},
@@ -58,8 +58,8 @@ public class Go {
         if(enemyNeighbors != neighborCount){ //piece can breathe and is alive
             return true;
         }
-        else{
-            return false;
+        else{                             
+            return false; //piece is dead   
         }
     }
 
