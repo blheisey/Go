@@ -7,12 +7,12 @@ public class Go {
     static String[][] goBoard = new String[9][9];
     static String[][] otherBoard = {
         {null, null, "X", "X", null, null, null, null, null},
-        {null, "●", "O", "O", "X", null, null, null, null},
+        {null, "X", "O", "O", "X", null, null, null, null},
         {null, "X", "O", null, "O", "X", null, null, null},
         {null, "X", "O", "O", "O", "X", null, null, null},
+        {null, "x", "O", null, "O", "X", null, null, null},
         {null, null, "X", "O", "O", "X", null, null, null},
         {null, null, null, "X", "X", null, null, null, null},
-        {null, null, null, null, null, null, null, null, null},
         {null, null, null, null, null, null, null, null, null},
         {null, null, null, null, null, null, null, null, null},
     };
