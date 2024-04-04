@@ -1,5 +1,6 @@
-package Go;
+
 import java.util.Scanner;
+
 
 public class Go {
 
@@ -21,33 +22,48 @@ public class Go {
 
 
     public static boolean isAlive(int row, int col){
-        //corner piece
-        if(row == 0 && col == 0 || row == 8 && col == 8 || row == 0 && col == 8 || row == 8 && col == 0){
-
-        }
-    }
-
-    public static boolean didCapture(int moveX, int moveY, boolean turn){
-
-        //for a piece placed in the corner
-        if(moveX == 0 && moveY == 0 || moveX == 8 && moveY == 0 || moveX == 0 && moveY == 8 || moveX == 8 && moveY == 8){
-            
-        }
-        //check if a piece not in the corner or edge has been captured
-        if(turn == true){ //black's piece               //check black piece's neighbor's to avoid illegal suicide move
-            if(goBoard[moveY + 1][moveX].equals("O") && goBoard[moveY][moveX + 1].equals("O") && goBoard[moveY - 1][moveX].equals("O") && goBoard[moveY][moveX - 1].equals("O")){
-                return true;
+        int enemyNeighbors = 0;
+        int neighborCount = 0;
+        //if piece is breathing
+        if(row - 1 >= 0){
+            neighborCount += 1
+            if(!otherBoard[row - 1][col].equals(otherBoard[row][col]) && !otherBoard[row - 1][col].equals("-|")){
+                enemyNeighbors += 1
             }
-            else{
-                return true;
-            }
-            //so
         }
-    
+
+        if(row + 1 <= 8){
+            neighborCount += 1
+            if(!otherBoard[row + 1][col].equals(otherBoard[row][col]) && !otherBoard[row + 1][col].equals("-|")){
+                    enemyNeighbors += 1
+            }
+
+        }
+
+        if(col - 1 >= 0){
+            neighborCount += 1
+            if(!otherBoard[row][col - 1 ].equals(otherBoard[row][col]) && !otherBoard[row][col -1].equals("-|")){
+                enemyNeighbors += 1
+            }
+        }
+
+        if(col + 1 <= 8){
+            neighborCount += 1
+            if(!otherBoard[row][col + 1].equals(otherBoard[row][col]) && !otherBoard[row][col + 1].equals("-|")){
+                enemyNeighbors += 1
+            }
+        
+        }
+
+        if(enemyNeighbors != neighborCount){ //piece can breathe and is alive
+            return true
+        }
         else{
-            return false;
+            
+
         }
-    }//
+
+    
     public static void main(String[] args) {
 
         Boolean cont = true, turn = true;
@@ -111,6 +127,7 @@ public class Go {
 
     }
 
+}
 }
 
 
