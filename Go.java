@@ -1,27 +1,26 @@
 
 import java.util.Scanner;
 
-//changes
-public class Go {
-
-    static String[][] goBoard = new String[9][9];
-    static String[][] otherBoard = {
-        {null, null, "X", "X", null, null, null, null, null},
-        {null, "X", "O", "O", "X", null, null, null, null},
-        {null, "X", "O", null, "O", "X", null, null, null},
-        {null, "X", "O", "O", "O", "X", null, null, null},
-        {null, "x", "O", null, "O", "X", null, null, null},
-        {null, null, "X", "O", "O", "X", null, null, null},
-        {null, null, null, "X", "X", null, null, null, null},
-        {null, null, null, null, null, null, null, null, null},
-        {null, null, null, null, null, null, null, null, null},
-    };
-    static boolean[][] lives = new boolean[9][9];
-    static boolean[][] territory = new boolean[9][9];
-    static boolean[][] beenChecked = new boolean[9][9];
+class GoPiece{
+    //attributes
+    private String color;
+    private int row;
+    private int col;
 
 
-    public static boolean isAlive(int row, int col){
+    //constructor
+    public GoPiece(String color, int row, int col){
+        this.color = color;
+        this.row = row;
+        this.col = col;
+    }
+
+    //methods
+    public String GetColor(){
+        return color;
+    }
+
+    public boolean isAlive(){
         int enemyNeighbors = 0;
         int neighborCount = 0;
         //if piece is breathing
@@ -61,7 +60,29 @@ public class Go {
         else{                             
             return false; //piece is dead   
         }
-    }
+        }
+}
+
+public class Go {
+
+    
+
+    static String[][] goBoard = new String[9][9];
+    static String[][] otherBoard = {
+        {null, null, "X", "X", null, null, null, null, null},
+        {null, "X", "O", "O", "X", null, null, null, null},
+        {null, "X", "O", null, "O", "X", null, null, null},
+        {null, "X", "O", "O", "O", "X", null, null, null},
+        {null, "x", "O", null, "O", "X", null, null, null},
+        {null, null, "X", "O", "O", "X", null, null, null},
+        {null, null, null, "X", "X", null, null, null, null},
+        {null, null, null, null, null, null, null, null, null},
+        {null, null, null, null, null, null, null, null, null},
+    };
+    static boolean[][] lives = new boolean[9][9];
+    static boolean[][] territory = new boolean[9][9];
+    static boolean[][] beenChecked = new boolean[9][9];
+
 
     
     public static void main(String[] args) {
@@ -104,6 +125,8 @@ public class Go {
                     + ((turn) ? "Black" : "White") + " piece");
 
             moveY = scn.nextInt();
+
+            GoPiece piece = new GoPiece(((turn) ? "Black" : "White"), moveY, moveX);
 
             if ((moveY > dimension || moveY < 0) || (moveX > dimension || moveX < 0)) {
                 System.out.println(
