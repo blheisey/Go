@@ -1,7 +1,7 @@
 
 import java.util.Scanner;
 
-
+//changes
 public class Go {
 
     static String[][] goBoard = new String[9][9];
