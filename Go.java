@@ -6,6 +6,7 @@ class GoPiece{
     private String color;
     private int row;
     private int col;
+    public boolean Alive;
 
 
     //constructor
@@ -20,36 +21,82 @@ class GoPiece{
         return color;
     }
 
-    public boolean isAlive(){
+    public int GetRow(){
+        return row;
+    }
+
+    public int GetCol(){
+        return col;
+    }
+
+    public String SetPiece(){
+        if(color.equals("Black")){
+            return("X");
+        }else{
+            return("O");
+        }
+    }
+       
+        
+}
+
+
+public class Go {
+
+    
+
+    static String[][] goBoard = new String[9][9];
+    static String[][] otherBoard = {
+        {null, null, "X", null, null, null, null, null, null},
+        {null, "X", "O", "X", "X", null, null, null, null},
+        {null, "X", null, null, "O", "X", null, null, null},
+        {null, "X", "O", "O", "O", "X", null, null, null},
+        {null, "x", "O", null, "O", "X", null, null, null},
+        {null, null, "X", "O", "O", "X", null, null, null},
+        {null, null, null, "X", "X", null, null, null, null},
+        {null, null, null, null, null, null, null, null, null},
+        {null, null, null, null, null, null, null, null, null},
+    };
+
+
+    public static boolean isAlive(GoPiece piece){
         int enemyNeighbors = 0;
         int neighborCount = 0;
         //if piece is breathing
-        if(row - 1 >= 0){
-            neighborCount += 1;
-            if(!otherBoard[row - 1][col].equals(otherBoard[row][col]) && !otherBoard[row - 1][col].equals("-|")){
-                enemyNeighbors += 1;
-            }
-        }
-
-        if(row + 1 <= 8){
-            neighborCount += 1;
-            if(!otherBoard[row + 1][col].equals(otherBoard[row][col]) && !otherBoard[row + 1][col].equals("-|")){
+        if(piece.GetRow() - 1 >= 0){ //is neighbor in bounds
+            neighborCount += 1;//there is a neighbor or empty space here
+            if(goBoard[piece.GetRow() - 1][piece.GetCol()] != null){
+                if(!piece.GetColor().equals(goBoard[piece.GetRow() - 1][piece.GetCol()])){//piece is opposing color
                     enemyNeighbors += 1;
-            }
-
-        }
-
-        if(col - 1 >= 0){
-            neighborCount += 1;
-            if(!otherBoard[row][col - 1 ].equals(otherBoard[row][col]) && !otherBoard[row][col -1].equals("-|")){
-                enemyNeighbors += 1;
+                }
             }
         }
 
-        if(col + 1 <= 8){
+        if(piece.GetRow() + 1 <= 8){
             neighborCount += 1;
-            if(!otherBoard[row][col + 1].equals(otherBoard[row][col]) && !otherBoard[row][col + 1].equals("-|")){
-                enemyNeighbors += 1;
+            if(goBoard[piece.GetRow() + 1][piece.GetCol()] != null){
+                if(!piece.GetColor().equals(goBoard[piece.GetRow() + 1][piece.GetCol()])){
+                    enemyNeighbors += 1;
+                }
+            }
+        }
+
+        if(piece.GetCol() - 1 >= 0){
+            neighborCount += 1;
+            if(goBoard[piece.GetRow()][piece.GetCol() - 1] != null){
+                if(!piece.GetColor().equals(goBoard[piece.GetRow()][piece.GetCol() - 1])){
+                    enemyNeighbors += 1;
+                }
+            }
+           
+        }
+
+        if(piece.GetCol() + 1 <= 8){
+            neighborCount += 1;
+            if(goBoard[piece.GetRow()][piece.GetCol() + 1] != null){
+                if(!piece.GetColor().equals(goBoard[piece.GetRow()][piece.GetCol() + 1])){
+                    enemyNeighbors += 1;
+                }
             }
         
         }
@@ -61,24 +108,6 @@ class GoPiece{
             return false; //piece is dead   
         }
         }
-}
-
-public class Go {
-
-    
-
-    static String[][] goBoard = new String[9][9];
-    static String[][] otherBoard = {
-        {null, null, "X", "X", null, null, null, null, null},
-        {null, "X", "O", "O", "X", null, null, null, null},
-        {null, "X", "O", null, "O", "X", null, null, null},
-        {null, "X", "O", "O", "O", "X", null, null, null},
-        {null, "x", "O", null, "O", "X", null, null, null},
-        {null, null, "X", "O", "O", "X", null, null, null},
-        {null, null, null, "X", "X", null, null, null, null},
-        {null, null, null, null, null, null, null, null, null},
-        {null, null, null, null, null, null, null, null, null},
-    };
     static boolean[][] lives = new boolean[9][9];
     static boolean[][] territory = new boolean[9][9];
     static boolean[][] beenChecked = new boolean[9][9];
@@ -92,22 +121,22 @@ public class Go {
 
         Scanner scn = new Scanner(System.in);
 
-        int dimension = otherBoard.length - 1;
+        int dimension = goBoard.length - 1;
 
         while (cont) {
 
             System.out.println("  0 1 2 3 4 5 6 7 8");
-            for (int i = 0; i < otherBoard.length; i++) {
+            for (int i = 0; i < goBoard.length; i++) {
                 System.out.print(i + " ");
-                for (int j = 0; j < otherBoard[i].length; j++) {
-                    if (otherBoard[i][j] == null) {
+                for (int j = 0; j < goBoard[i].length; j++) {
+                    if (goBoard[i][j] == null) {
                         if (j == 0)
                             System.out.print("|");
                         else
                             System.out.print("-|");
 
                     } else {
-                        System.out.print(otherBoard[i][j]);
+                        System.out.print(goBoard[i][j]);
                     }
 
                 }
@@ -134,8 +163,9 @@ public class Go {
                 continue;
             } else {
 
-                if (otherBoard[moveY][moveX] == null) {
-                    otherBoard[moveY][moveX] = ((turn) ? "-●" : "-◯");
+                if (goBoard[moveY][moveX].equals("|") || goBoard[moveY][moveX].equals("-|")) {
+                    goBoard[moveY][moveX] = piece.SetPiece();
+                    System.out.println(isAlive(piece));
                 } else {
                     System.out.println(
                             "\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\nThere is already a piece there!\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
