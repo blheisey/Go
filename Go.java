@@ -167,11 +167,11 @@ public class Go {
             }
 
             turn = !turn;
-            String stop = scn.next();
-            System.out.println("Please enter y to keep playing or n to stop");
-            if(stop.equals("n")){
-                cont = false;
-            }
+            // String stop = scn.next();
+            // System.out.println("Please enter y to keep playing or n to stop");
+            // if(stop.equals("n")){
+            //     cont = false;
+            // }
         }
         scn.close();
 
