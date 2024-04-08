@@ -6,9 +6,20 @@ public class Go {
 
     static boolean[][] beenChecked = new boolean[9][9];
     static boolean[][] alwaysFalse = new boolean[9][9];
+    static boolean[][] lives = new boolean[9][9];
 
-    static String[][] goBoard = new String[9][9];
-
+    //static String[][] goBoard = new String[9][9];
+    static String[][] goBoard =     {
+                                        {null,null,null,null,"X",null,null,null,null},
+                                        {null,null,null,"X","O","X",null,null,null},
+                                        {null,null,null,"X","O","X",null,null,null},
+                                        {null,null,null,null,"X",null,null,null,null},
+                                        {null,null,null,null,null,null,null,null,null},
+                                        {null,null,null,null,null,null,null,null,null},
+                                        {null,null,null,null,null,null,null,null,null},
+                                        {null,null,null,null,null,null,null,null,null},
+                                        {null,null,null,null,null,null,null,null,null}
+                                    };
     public static void printBoard(){
         System.out.println("  0 1 2 3 4 5 6 7 8");
             for (int i = 0; i < goBoard.length; i++) {
@@ -29,20 +40,59 @@ public class Go {
             }
     }
     
+    public static boolean canBreathe(int row, int col){
+        if(row - 1 >= 0){
+            if(goBoard[row -1][col] == null){
+                return true; //add if statements
+            }
+        }
 
-    public static boolean isAlive(int row, int col, String piece){ //if piece is out of bounds (no neighbor there) or already been checked
-        if (row <= -1 || row >= 9 || col <= -1 || col >= 9 || beenChecked[row][col]) {
-            return false;
+        if(row + 1 <= 8){
+            if(goBoard[row + 1][col] == null){
+                return true;
             }
-            if (goBoard[row][col] == null) { 
+        }
+
+        if(col - 1 >= 0){
+            if(goBoard[row][col -1] == null){
+                return true;
+            }
+        }
+
+        if(col + 1 <= 8){
+            if(goBoard[row][col + 1] == null){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isAlive(int row, int col){ //if piece is out of bounds (no neighbor there) or already been checked
+        beenChecked[row][col] = true;
+
+        if(canBreathe(row, col)){
             return true;
-            }
-            // if (goBoard[row][col] != piece) {
-            // return false;
-            //}
-            beenChecked[row][col] = true;
-            return isAlive(row-1, col, piece) || isAlive(row+1, col, piece) || 
-            isAlive(row, col-1, piece) || isAlive(row, col+1, piece);
+        }
+
+        if(goBoard[row - 1][col] == goBoard[row][col] && !beenChecked[row - 1][col]){
+            isAlive(row - 1, col);
+        }
+
+        if(goBoard[row + 1][col] == goBoard[row][col] && !beenChecked[row + 1][col]){
+            isAlive(row + 1, col);
+        }
+
+        if(goBoard[row][col - 1] == goBoard[row][col] && !beenChecked[row][col - 1]){
+            isAlive(row, col - 1);
+        }
+
+        if(goBoard[row][col + 1] == goBoard[row][col] && !beenChecked[row][col + 1]){
+            isAlive(row, col + 1);
+        }
+
+        lives[row][col] = true; //piece is dead here
+        return false;
     }
 
     
@@ -84,7 +134,7 @@ public class Go {
                 if (goBoard[moveY][moveX] == null) {
                         goBoard[moveY][moveX] = ((turn) ? "X" : "O");
                         printBoard();
-                        System.out.println(isAlive(moveY, moveX, (turn ? "X" : "O"))); 
+                        System.out.println(isAlive(moveY, moveX)); 
                 } else {
                     System.out.println(
                             "\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\nThere is already a piece there!\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
@@ -94,27 +144,39 @@ public class Go {
                 for (int i = 0; i < goBoard.length; i++){ //iterating over Go board
                     for (int j = 0; j < goBoard[i].length; j++){
                         if(goBoard[i][j] != null){ //if there's a piece there
-                            if(!isAlive(i, j, ((turn) ? "X" : "O"))){ //currentPiece is dead
+                            if(!isAlive(i, j)){ //currentPiece is dead
                                 if(goBoard[i][j].equals("x")){ //piece is black
                                     capturedBlack += 1;
                                 }else{
                                     capturedWhite += 1;
                                 }
-                                goBoard[i][j] = null; //remove captured piece from board
                             }
                         }
                     }
                 }
                 beenChecked = alwaysFalse.clone();
+                for (int i = 0; i < lives.length; i++){ //iterating over Go board
+                    for (int j = 0; j < lives[i].length; j++){
+                        if(lives[i][j] == true){
+                            goBoard[i][j] = null;
+                        }
+
+                    }
+                }
 
             }
 
             turn = !turn;
+            String stop = scn.next();
+            System.out.println("Please enter y to keep playing or n to stop");
+            if(stop.equals("n")){
+                cont = false;
+            }
         }
         scn.close();
 
-    
-
+    System.out.println(capturedWhite + "white pieces were captured.");
+    System.out.println(capturedBlack + "black pieces were captured.");
 }
 }
 
