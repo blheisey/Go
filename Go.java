@@ -10,15 +10,9 @@ class GoPiece{
 
 
     //constructor
-    public GoPiece(String color, int row, int col){
-        this.color = color;
+    public GoPiece(int row, int col){
         this.row = row;
         this.col = col;
-    }
-
-    //methods
-    public String GetColor(){
-        return color;
     }
 
     public int GetRow(){
@@ -43,78 +37,38 @@ class GoPiece{
 
 public class Go {
 
-    
+    static boolean[][] beenChecked = new boolean[9][9];
 
     static String[][] goBoard = new String[9][9];
-    static String[][] otherBoard = {
-        {null, null, "X", null, null, null, null, null, null},
-        {null, "X", "O", "X", "X", null, null, null, null},
-        {null, "X", null, null, "O", "X", null, null, null},
-        {null, "X", "O", "O", "O", "X", null, null, null},
-        {null, "x", "O", null, "O", "X", null, null, null},
-        {null, null, "X", "O", "O", "X", null, null, null},
-        {null, null, null, "X", "X", null, null, null, null},
-        {null, null, null, null, null, null, null, null, null},
-        {null, null, null, null, null, null, null, null, null},
-    };
+    
 
-
-    public static boolean isAlive(GoPiece piece){
-        int enemyNeighbors = 0;
-        int neighborCount = 0;
-        //if piece is breathing
-        if(piece.GetRow() - 1 >= 0){ //is neighbor in bounds
-            neighborCount += 1;//there is a neighbor or empty space here
-            if(goBoard[piece.GetRow() - 1][piece.GetCol()] != null){
-                if(!piece.GetColor().equals(goBoard[piece.GetRow() - 1][piece.GetCol()])){//piece is opposing color
-                    enemyNeighbors += 1;
-                }
+    public static boolean isAlive(GoPiece piece){ //if piece is out of bounds (no neighbor there) or already been checked
+            if (piece.GetCol() <= -1 || piece.GetCol() >= 9 || piece.GetRow() <= -1 || piece.GetRow() >= 9 || beenChecked[piece.GetCol()][piece.GetRow()]) {
+            return false;
             }
-        }
-
-        if(piece.GetRow() + 1 <= 8){
-            neighborCount += 1;
-            if(goBoard[piece.GetRow() + 1][piece.GetCol()] != null){
-                if(!piece.GetColor().equals(goBoard[piece.GetRow() + 1][piece.GetCol()])){
-                    enemyNeighbors += 1;
-                }
-            }
-        }
-
-        if(piece.GetCol() - 1 >= 0){
-            neighborCount += 1;
-            if(goBoard[piece.GetRow()][piece.GetCol() - 1] != null){
-                if(!piece.GetColor().equals(goBoard[piece.GetRow()][piece.GetCol() - 1])){
-                    enemyNeighbors += 1;
-                }
-            }
-           
-        }
-
-        if(piece.GetCol() + 1 <= 8){
-            neighborCount += 1;
-            if(goBoard[piece.GetRow()][piece.GetCol() + 1] != null){
-                if(!piece.GetColor().equals(goBoard[piece.GetRow()][piece.GetCol() + 1])){
-                    enemyNeighbors += 1;
-                }
-            }
-        
-        }
-
-        if(enemyNeighbors != neighborCount){ //piece can breathe and is alive
+            if (goBoard[piece.GetRow()][piece.GetCol()] == null) { //there is an empty space (piece can breathe)
             return true;
-        }
-        else{                             
-            return false; //piece is dead   
-        }
-        }
+            }
+            if (!goBoard[piece.GetRow()][piece.GetCol()].equals(piece)){ //there is an enemy
+            return false;
+            }
+            beenChecked[piece.GetRow()][piece.GetCol()] = true;
+            return isAlive(piece.GetRow()-1, piece.GetCol(), piece) || checkLiberties(x+1, y, piece) || 
+            checkLiberties(x, y-1, piece) || checkLiberties(x, y+1, piece);
+            
+        
+
+    }
     static boolean[][] lives = new boolean[9][9];
     static boolean[][] territory = new boolean[9][9];
-    static boolean[][] beenChecked = new boolean[9][9];
+    
 
 
     
     public static void main(String[] args) {
+
+        int capturedWhite = 0;
+        int capturedBlack = 0;
 
         Boolean cont = true, turn = true;
         int moveX, moveY;
@@ -155,7 +109,7 @@ public class Go {
 
             moveY = scn.nextInt();
 
-            GoPiece piece = new GoPiece(((turn) ? "Black" : "White"), moveY, moveX);
+            GoPiece piece = new GoPiece(moveY, moveX);
 
             if ((moveY > dimension || moveY < 0) || (moveX > dimension || moveX < 0)) {
                 System.out.println(
@@ -170,6 +124,22 @@ public class Go {
                     System.out.println(
                             "\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\nThere is already a piece there!\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
                     continue;
+                }
+
+                for (int i = 0; i < goBoard.length; i++){ //iterating over Go board
+                    for (int j = 0; j < goBoard[i].length; j++){
+                        if(goBoard[i][j] != null){ //if there's a piece there
+                            GoPiece currentPiece = new GoPiece(i, j); //create GoPiece object
+                            if(isAlive(currentPiece) == false){ //currentPiece is dead
+                                if(goBoard[i][j].equals("x")){ //piece is black
+                                    capturedBlack += 1;
+                                }else{
+                                    capturedWhite += 1;
+                                }
+                                goBoard[i][j] = null; //remove captured piece from board
+                            }
+                        }
+                    }
                 }
 
             }
