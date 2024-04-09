@@ -159,11 +159,11 @@ public class Go {
                     for (int j = 0; j < lives[i].length; j++){
                         if(lives[i][j] == true){
                             goBoard[i][j] = null;
-                            printBoard();
                         }
 
                     }
                 }
+                printBoard();
 
             }
 
