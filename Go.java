@@ -43,7 +43,7 @@ public class Go {
     
     public static boolean canBreathe(int row, int col){
         if(row - 1 >= 0){
-            if(goBoard[row -1][col] == null){
+            if(goBoard[row - 1][col] == null){
                 return true; //add if statements
             }
         }
@@ -71,25 +71,26 @@ public class Go {
 
     public static boolean isAlive(int row, int col){ 
         beenChecked[row][col] = true;
+        boolean alive = false;
 
         if(canBreathe(row, col)){
             return true;
         }
 
         if(goBoard[row - 1][col] == goBoard[row][col] && !beenChecked[row - 1][col]){
-            isAlive(row - 1, col);
+            alive |= isAlive(row - 1, col);
         }
 
         if(goBoard[row + 1][col] == goBoard[row][col] && !beenChecked[row + 1][col]){
-            isAlive(row + 1, col);
+            alive |= isAlive(row + 1, col);
         }
 
         if(goBoard[row][col - 1] == goBoard[row][col] && !beenChecked[row][col - 1]){
-            isAlive(row, col - 1);
+            alive |= isAlive(row, col - 1);
         }
 
         if(goBoard[row][col + 1] == goBoard[row][col] && !beenChecked[row][col + 1]){
-            isAlive(row, col + 1);
+            alive |= isAlive(row, col + 1);
         }
 
         lives[row][col] = true; //piece is dead here
@@ -144,7 +145,7 @@ public class Go {
                 for (int i = 0; i < goBoard.length; i++){ //iterating over Go board
                     for (int j = 0; j < goBoard[i].length; j++){
                         if(goBoard[i][j] != null){ //if there's a piece there
-                            if(!isAlive(i, j)){ //currentPiece is dead
+                            if(!isAlive(i, j)){ //current piece is dead
                                 if(goBoard[i][j].equals("X")){ //piece is black
                                     capturedBlack += 1;
                                 }else{
@@ -176,8 +177,8 @@ public class Go {
         }
         scn.close();
 
-    System.out.println(capturedWhite + "white pieces were captured.");
-    System.out.println(capturedBlack + "black pieces were captured.");
+    System.out.println(capturedWhite + " white pieces were captured.");
+    System.out.println(capturedBlack + " black pieces were captured.");
 }
 }
 
