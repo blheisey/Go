@@ -134,7 +134,7 @@ public class Go {
 
                 if (goBoard[moveY][moveX] == null) {
                         goBoard[moveY][moveX] = ((turn) ? "X" : "O");
-                        printBoard();
+                        
                 } else {
                     System.out.println(
                             "\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\nThere is already a piece there!\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
