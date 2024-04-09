@@ -21,6 +21,7 @@ public class Go {
                                         {null,null,null,null,null,null,null,null,null}
                                     };
     public static void printBoard(){
+        System.out.println();
         System.out.println("  0 1 2 3 4 5 6 7 8");
             for (int i = 0; i < goBoard.length; i++) {
                 System.out.print(i + " ");
@@ -68,7 +69,7 @@ public class Go {
         return false;
     }
 
-    public static boolean isAlive(int row, int col){ //if piece is out of bounds (no neighbor there) or already been checked
+    public static boolean isAlive(int row, int col){ 
         beenChecked[row][col] = true;
 
         if(canBreathe(row, col)){
@@ -134,7 +135,6 @@ public class Go {
                 if (goBoard[moveY][moveX] == null) {
                         goBoard[moveY][moveX] = ((turn) ? "X" : "O");
                         printBoard();
-                        System.out.println(isAlive(moveY, moveX)); 
                 } else {
                     System.out.println(
                             "\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\nThere is already a piece there!\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
@@ -145,7 +145,7 @@ public class Go {
                     for (int j = 0; j < goBoard[i].length; j++){
                         if(goBoard[i][j] != null){ //if there's a piece there
                             if(!isAlive(i, j)){ //currentPiece is dead
-                                if(goBoard[i][j].equals("x")){ //piece is black
+                                if(goBoard[i][j].equals("X")){ //piece is black
                                     capturedBlack += 1;
                                 }else{
                                     capturedWhite += 1;
@@ -159,6 +159,7 @@ public class Go {
                     for (int j = 0; j < lives[i].length; j++){
                         if(lives[i][j] == true){
                             goBoard[i][j] = null;
+                            printBoard();
                         }
 
                     }
@@ -167,11 +168,11 @@ public class Go {
             }
 
             turn = !turn;
-            // String stop = scn.next();
-            // System.out.println("Please enter y to keep playing or n to stop");
-            // if(stop.equals("n")){
-            //     cont = false;
-            // }
+            System.out.println("Please enter y to keep playing or n to stop");
+            String choice = scn.next();
+            if(choice.equals("n")){
+                cont = false;
+            }
         }
         scn.close();
 
