@@ -71,31 +71,32 @@ public class Go {
 
     public static boolean isAlive(int row, int col){ 
         beenChecked[row][col] = true;
-        boolean alive = false;
+        
 
         if(canBreathe(row, col)){
             return true;
         }
 
         if(goBoard[row - 1][col] == goBoard[row][col] && !beenChecked[row - 1][col]){
-            alive |= isAlive(row - 1, col);
+            isAlive(row - 1, col);
         }
 
         if(goBoard[row + 1][col] == goBoard[row][col] && !beenChecked[row + 1][col]){
-            alive |= isAlive(row + 1, col);
+            isAlive(row + 1, col);
         }
 
         if(goBoard[row][col - 1] == goBoard[row][col] && !beenChecked[row][col - 1]){
-            alive |= isAlive(row, col - 1);
+            isAlive(row, col - 1);
         }
 
         if(goBoard[row][col + 1] == goBoard[row][col] && !beenChecked[row][col + 1]){
-            alive |= isAlive(row, col + 1);
+            isAlive(row, col + 1);
         }
 
         lives[row][col] = true; //piece is dead here
         return false;
     }
+    
 
     
     
